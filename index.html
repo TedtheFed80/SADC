@@ -1,440 +1,79 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import { Gavel, ClipboardList, Users, Shield, BookUser, FileText } from "lucide-react";
+{
+  "name": "san-andreas-court",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "framer-motion": "^10.12.16",
+    "lucide-react": "^0.344.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^4.0.0"
+  }
+}{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
+  "include": ["src"]{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["vite.config.ts"]import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-// --- Theme tokens ---
-const gold = "#d4af37"; // rich gold
-const goldSoft = "#b8961e";
-const black = "#0b0b0b";
-const panel = "#121212";
-const border = "#2a2a2a";
+export default defineConfig({
+  plugins: [react()],
+  base: '/san-andreas-court/'
+})<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>San Andreas District Court</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
 
-// --- Simple Hash Router ---
-const tabs = [
-  { key: "warrants", label: "Warrants", icon: ClipboardList },
-  { key: "judges", label: "Judges", icon: Gavel },
-  { key: "law-enforcement", label: "Law Enforcement", icon: Shield },
-  { key: "clerks", label: "Clerks", icon: BookUser },
-  { key: "docket", label: "Docket", icon: FileText },
-] as const;
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
 
-type TabKey = typeof tabs[number]["key"];
+  </body><PASTE THE APP.TSX CODE FROM EARLIER HERE>
+</html>
 
-function useHashRoute(defaultKey: TabKey): [TabKey, (k: TabKey) => void] {
-  const [active, setActive] = useState<TabKey>(() => {
-    const h = window.location.hash.replace("#/", "").replace("#", "");
-    return (tabs.find(t => t.key === (h as TabKey))?.key ?? defaultKey) as TabKey;
-  });
-  useEffect(() => {
-    const onHash = () => {
-      const h = window.location.hash.replace("#/", "").replace("#", "");
-      if (tabs.some(t => t.key === h)) setActive(h as TabKey);
-    };
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-  const navigate = (k: TabKey) => {
-    if (k !== active) {
-      window.location.hash = `#/${k}`;
-      setActive(k);
-    }
-  };
-  return [active, navigate];
+
 }
-
-// --- Reusable UI ---
-const Card: React.FC<React.PropsWithChildren<{ title?: string; right?: React.ReactNode }>> = ({ title, right, children }) => (
-  <div className="rounded-2xl shadow-lg p-5 md:p-6" style={{ background: panel, border: `1px solid ${border}` }}>
-    {title && (
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg md:text-xl font-semibold" style={{ color: gold }}>{title}</h3>
-        {right}
-      </div>
-    )}
-    <div className="text-sm md:text-base leading-relaxed" style={{ color: "#e6e6e6" }}>{children}</div>
-  </div>
-);
-
-const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ className = "", children, ...rest }) => (
-  <button
-    className={`px-4 py-2 rounded-2xl font-medium hover:opacity-90 transition-opacity shadow ${className}`}
-    style={{ background: gold, color: black }}
-    {...rest}
-  >
-    {children}
-  </button>
-);
-
-const GhostButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ className = "", children, ...rest }) => (
-  <button
-    className={`px-3 py-1.5 rounded-2xl font-medium transition-colors border ${className}`}
-    style={{ color: gold, borderColor: goldSoft, background: "transparent" }}
-    {...rest}
-  >
-    {children}
-  </button>
-);
-
-// --- Data types ---
-interface Warrant {
-  id: string;
-  defendant: string;
-  charge: string;
-  issuer: string; // judge
-  status: "Active" | "Served" | "Withdrawn";
-}
-
-interface Person { id: string; name: string; title?: string; agency?: string; email?: string; phone?: string; }
-
-interface DocketItem { id: string; caseNumber: string; defendant: string; ada: string; defense: string; when: string; room?: string; }
-
-// --- Demo State (replace with API later) ---
-function useDemoState() {
-  const [warrants, setWarrants] = useState<Warrant[]>([
-    { id: "SW-001", defendant: "Alex Anderson", charge: "Felony Firearm Possession", issuer: "Hon. J. Gamble", status: "Active" },
-    { id: "SW-002", defendant: "Jay Kennedy", charge: "Weapons w/ Gang Enhancement", issuer: "Hon. J. Gamble", status: "Served" },
-  ]);
-
-  const [judges, setJudges] = useState<Person[]>([
-    { id: "J-1", name: "Hon. John Gamble", title: "District Court Judge", email: "judge.gamble@sa-courts.gov" },
-  ]);
-
-  const [officers, setOfficers] = useState<Person[]>([
-    { id: "LE-1", name: "Det. Lee", agency: "LSPD", email: "lee@lspd.gov" },
-    { id: "LE-2", name: "Trooper Maddox", agency: "SASP", email: "maddox@sasp.gov" },
-  ]);
-
-  const [clerks, setClerks] = useState<Person[]>([
-    { id: "C-1", name: "Sara McCane", title: "Chief Public Defender", email: "sara.mccane@publicdefender.sa" },
-  ]);
-
-  const [docket, setDocket] = useState<DocketItem[]>([
-    { id: "D-1001", caseNumber: "36512", defendant: "Jay Kennedy", ada: "Ethan Brooks", defense: "(pro se)", when: "2025-08-20 14:00", room: "2B" },
-  ]);
-
-  return { warrants, setWarrants, judges, setJudges, officers, setOfficers, clerks, setClerks, docket, setDocket };
-}
-
-// --- Pages ---
-const WarrantsPage: React.FC<{ data: Warrant[]; add: (w: Warrant) => void; remove: (id: string) => void }>
-= ({ data, add, remove }) => {
-  const [form, setForm] = useState<Partial<Warrant>>({ status: "Active" });
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.id || !form.defendant || !form.charge || !form.issuer || !form.status) return;
-    add(form as Warrant);
-    setForm({ status: "Active" });
-  };
-  return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <Card title="Create Warrant">
-        <form onSubmit={onSubmit} className="grid gap-3">
-          <Input label="Warrant ID" value={form.id ?? ""} onChange={v => setForm(f => ({ ...f, id: v }))} />
-          <Input label="Defendant" value={form.defendant ?? ""} onChange={v => setForm(f => ({ ...f, defendant: v }))} />
-          <Input label="Charge" value={form.charge ?? ""} onChange={v => setForm(f => ({ ...f, charge: v }))} />
-          <Input label="Issuer (Judge)" value={form.issuer ?? ""} onChange={v => setForm(f => ({ ...f, issuer: v }))} />
-          <Select label="Status" value={form.status ?? "Active"} options={["Active","Served","Withdrawn"]} onChange={v => setForm(f => ({ ...f, status: v as Warrant["status"] }))} />
-          <div className="flex gap-3">
-            <Button type="submit">Add Warrant</Button>
-            <GhostButton type="reset" onClick={() => setForm({ status: "Active" })}>Clear</GhostButton>
-          </div>
-        </form>
-      </Card>
-      <Card title="Active Warrants">
-        <Table
-          columns={["ID","Defendant","Charge","Issuer","Status","Actions"]}
-          rows={data.map(w => [w.id, w.defendant, w.charge, w.issuer, w.status,
-            <GhostButton key={`rm-${w.id}`} onClick={() => remove(w.id)}>Remove</GhostButton>
-          ])}
-        />
-      </Card>
-    </div>
-  );
-};
-
-const JudgesPage: React.FC<{ data: Person[]; add: (p: Person) => void; remove: (id: string) => void }>
-= ({ data, add, remove }) => {
-  const [form, setForm] = useState<Partial<Person>>({});
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.id || !form.name) return;
-    add(form as Person);
-    setForm({});
-  };
-  return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <Card title="Add Judge">
-        <form onSubmit={onSubmit} className="grid gap-3">
-          <Input label="ID" value={form.id ?? ""} onChange={v => setForm(f => ({ ...f, id: v }))} />
-          <Input label="Name" value={form.name ?? ""} onChange={v => setForm(f => ({ ...f, name: v }))} />
-          <Input label="Title" value={form.title ?? ""} onChange={v => setForm(f => ({ ...f, title: v }))} />
-          <Input label="Email" value={form.email ?? ""} onChange={v => setForm(f => ({ ...f, email: v }))} />
-          <div className="flex gap-3">
-            <Button type="submit">Add Judge</Button>
-            <GhostButton type="reset" onClick={() => setForm({})}>Clear</GhostButton>
-          </div>
-        </form>
-      </Card>
-      <Card title="Roster">
-        <Table columns={["ID","Name","Title","Email","Actions"]}
-          rows={data.map(p => [p.id, p.name, p.title ?? "—", p.email ?? "—",
-            <GhostButton key={`rm-${p.id}`} onClick={() => remove(p.id)}>Remove</GhostButton>])}
-        />
-      </Card>
-    </div>
-  );
-};
-
-const LawEnforcementPage: React.FC<{ data: Person[]; add: (p: Person) => void; remove: (id: string) => void }>
-= ({ data, add, remove }) => {
-  const [form, setForm] = useState<Partial<Person>>({});
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.id || !form.name) return;
-    add(form as Person);
-    setForm({});
-  };
-  return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <Card title="Add Law Enforcement Contact">
-        <form onSubmit={onSubmit} className="grid gap-3">
-          <Input label="ID" value={form.id ?? ""} onChange={v => setForm(f => ({ ...f, id: v }))} />
-          <Input label="Name" value={form.name ?? ""} onChange={v => setForm(f => ({ ...f, name: v }))} />
-          <Input label="Agency" value={form.agency ?? ""} onChange={v => setForm(f => ({ ...f, agency: v }))} />
-          <Input label="Email" value={form.email ?? ""} onChange={v => setForm(f => ({ ...f, email: v }))} />
-          <Input label="Phone" value={form.phone ?? ""} onChange={v => setForm(f => ({ ...f, phone: v }))} />
-          <div className="flex gap-3"><Button type="submit">Add Contact</Button><GhostButton type="reset" onClick={() => setForm({})}>Clear</GhostButton></div>
-        </form>
-      </Card>
-      <Card title="Directory">
-        <Table columns={["ID","Name","Agency","Email","Phone","Actions"]}
-          rows={data.map(p => [p.id, p.name, p.agency ?? "—", p.email ?? "—", p.phone ?? "—",
-            <GhostButton key={`rm-${p.id}`} onClick={() => remove(p.id)}>Remove</GhostButton>])}
-        />
-      </Card>
-    </div>
-  );
-};
-
-const ClerksPage: React.FC<{ data: Person[]; add: (p: Person) => void; remove: (id: string) => void }>
-= ({ data, add, remove }) => {
-  const [form, setForm] = useState<Partial<Person>>({});
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.id || !form.name) return;
-    add(form as Person);
-    setForm({});
-  };
-  return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <Card title="Add Clerk">
-        <form onSubmit={onSubmit} className="grid gap-3">
-          <Input label="ID" value={form.id ?? ""} onChange={v => setForm(f => ({ ...f, id: v }))} />
-          <Input label="Name" value={form.name ?? ""} onChange={v => setForm(f => ({ ...f, name: v }))} />
-          <Input label="Title" value={form.title ?? ""} onChange={v => setForm(f => ({ ...f, title: v }))} />
-          <Input label="Email" value={form.email ?? ""} onChange={v => setForm(f => ({ ...f, email: v }))} />
-          <div className="flex gap-3"><Button type="submit">Add Clerk</Button><GhostButton type="reset" onClick={() => setForm({})}>Clear</GhostButton></div>
-        </form>
-      </Card>
-      <Card title="Clerk Office">
-        <Table columns={["ID","Name","Title","Email","Actions"]}
-          rows={data.map(p => [p.id, p.name, p.title ?? "—", p.email ?? "—",
-            <GhostButton key={`rm-${p.id}`} onClick={() => remove(p.id)}>Remove</GhostButton>])}
-        />
-      </Card>
-    </div>
-  );
-};
-
-const DocketPage: React.FC<{ data: DocketItem[]; add: (d: DocketItem) => void; remove: (id: string) => void }>
-= ({ data, add, remove }) => {
-  const [form, setForm] = useState<Partial<DocketItem>>({});
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.id || !form.caseNumber || !form.defendant || !form.ada || !form.defense || !form.when) return;
-    add(form as DocketItem);
-    setForm({});
-  };
-  return (
-    <div className="grid gap-6">
-      <Card title="Add Docket Item">
-        <form onSubmit={onSubmit} className="grid md:grid-cols-3 gap-3">
-          <Input label="ID" value={form.id ?? ""} onChange={v => setForm(f => ({ ...f, id: v }))} />
-          <Input label="Case #" value={form.caseNumber ?? ""} onChange={v => setForm(f => ({ ...f, caseNumber: v }))} />
-          <Input label="Defendant" value={form.defendant ?? ""} onChange={v => setForm(f => ({ ...f, defendant: v }))} />
-          <Input label="ADA" value={form.ada ?? ""} onChange={v => setForm(f => ({ ...f, ada: v }))} />
-          <Input label="Defense" value={form.defense ?? ""} onChange={v => setForm(f => ({ ...f, defense: v }))} />
-          <Input label="When (YYYY-MM-DD HH:mm)" value={form.when ?? ""} onChange={v => setForm(f => ({ ...f, when: v }))} />
-          <Input label="Room" value={form.room ?? ""} onChange={v => setForm(f => ({ ...f, room: v }))} />
-          <div className="col-span-full flex gap-3 pt-1">
-            <Button type="submit">Add to Docket</Button>
-            <GhostButton type="reset" onClick={() => setForm({})}>Clear</GhostButton>
-          </div>
-        </form>
-      </Card>
-      <Card title="Court Docket">
-        <Table columns={["ID","Case #","Defendant","ADA","Defense","When","Room","Actions"]}
-          rows={data.map(d => [d.id, d.caseNumber, d.defendant, d.ada, d.defense, d.when, d.room ?? "—",
-            <GhostButton key={`rm-${d.id}`} onClick={() => remove(d.id)}>Remove</GhostButton>])}
-        />
-      </Card>
-    </div>
-  );
-};
-
-// --- Tiny building blocks ---
-const Input: React.FC<{ label: string; value: string; onChange: (v: string) => void; type?: string; placeholder?: string }>
-= ({ label, value, onChange, type = "text", placeholder }) => (
-  <label className="grid gap-1 text-sm" style={{ color: gold }}>
-    <span>{label}</span>
-    <input
-      className="rounded-xl px-3 py-2 outline-none focus:ring-2"
-      style={{ background: black, color: "#f7f7f7", border: `1px solid ${border}` }}
-      value={value}
-      type={type}
-      placeholder={placeholder}
-      onChange={e => onChange(e.target.value)}
-    />
-  </label>
-);
-
-const Select: React.FC<{ label: string; value: string; options: string[]; onChange: (v: string) => void }>
-= ({ label, value, options, onChange }) => (
-  <label className="grid gap-1 text-sm" style={{ color: gold }}>
-    <span>{label}</span>
-    <select
-      className="rounded-xl px-3 py-2"
-      style={{ background: black, color: "#f7f7f7", border: `1px solid ${border}` }}
-      value={value}
-      onChange={e => onChange(e.target.value)}
-    >
-      {options.map(o => <option key={o} value={o}>{o}</option>)}
-    </select>
-  </label>
-);
-
-const Table: React.FC<{ columns: string[]; rows: (React.ReactNode[])[] }>
-= ({ columns, rows }) => (
-  <div className="overflow-x-auto">
-    <table className="min-w-full text-left text-sm md:text-base">
-      <thead>
-        <tr>
-          {columns.map(col => (
-            <th key={col} className="px-3 py-2 font-semibold" style={{ color: gold, borderBottom: `1px solid ${border}` }}>{col}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((r, i) => (
-          <tr key={i} className="hover:bg-black/40">
-            {r.map((cell, j) => (
-              <td key={j} className="px-3 py-2" style={{ color: "#e9e9e9", borderBottom: `1px solid ${border}` }}>{cell}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-);
-
-// --- Main App ---
-export default function App() {
-  const [active, navigate] = useHashRoute("warrants");
-  const { warrants, setWarrants, judges, setJudges, officers, setOfficers, clerks, setClerks, docket, setDocket } = useDemoState();
-
-  const Page = useMemo(() => {
-    switch (active) {
-      case "warrants":
-        return <WarrantsPage
-          data={warrants}
-          add={w => setWarrants(prev => [...prev, w])}
-          remove={id => setWarrants(prev => prev.filter(x => x.id !== id))}
-        />;
-      case "judges":
-        return <JudgesPage data={judges} add={p => setJudges(prev => [...prev, p])} remove={id => setJudges(prev => prev.filter(x => x.id !== id))} />;
-      case "law-enforcement":
-        return <LawEnforcementPage data={officers} add={p => setOfficers(prev => [...prev, p])} remove={id => setOfficers(prev => prev.filter(x => x.id !== id))} />;
-      case "clerks":
-        return <ClerksPage data={clerks} add={p => setClerks(prev => [...prev, p])} remove={id => setClerks(prev => prev.filter(x => x.id !== id))} />;
-      case "docket":
-        return <DocketPage data={docket} add={d => setDocket(prev => [...prev, d])} remove={id => setDocket(prev => prev.filter(x => x.id !== id))} />;
-      default:
-        return null;
-    }
-  }, [active, warrants, judges, officers, clerks, docket]);
-
-  return (
-    <div className="min-h-screen" style={{ background: black }}>
-      {/* Header */}
-      <header className="sticky top-0 z-20 backdrop-blur" style={{ background: "rgba(0,0,0,0.7)", borderBottom: `1px solid ${border}` }}>
-        <div className="max-w-6xl mx-auto px-4 md:px-6">
-          <div className="flex items-center justify-between h-16">
-            <motion.h1
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="text-xl md:text-2xl font-extrabold tracking-wide"
-              style={{ color: gold }}
-            >
-              San Andreas District Court
-            </motion.h1>
-            <nav className="flex items-center gap-1 md:gap-2">
-              {tabs.map((t) => {
-                const Icon = t.icon;
-                const isActive = active === t.key;
-                return (
-                  <button
-                    key={t.key}
-                    onClick={() => navigate(t.key)}
-                    className={`px-3 md:px-4 py-2 rounded-2xl font-medium flex items-center gap-2 border transition-all ${isActive ? "shadow" : "opacity-80 hover:opacity-100"}`}
-                    style={{ color: isActive ? black : gold, background: isActive ? gold : "transparent", borderColor: goldSoft }}
-                    aria-current={isActive ? "page" : undefined}
-                  >
-                    <Icon size={18} />
-                    <span className="hidden sm:inline">{t.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero band */}
-      <section className="border-b" style={{ borderColor: border }}>
-        <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-10">
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <p className="text-sm md:text-base" style={{ color: gold }}>
-              Official Portal
-            </p>
-            <h2 className="text-2xl md:text-3xl font-bold mt-1" style={{ color: "#f1e9c9" }}>
-              Administrative Tools & Public Records
-            </h2>
-            <p className="mt-2 max-w-3xl text-sm md:text-base" style={{ color: "#d9d9d9" }}>
-              Use the navigation above to manage warrants, maintain the judicial roster, update law enforcement & clerk directories, and curate the active court docket.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Page Content */}
-      <main>
-        <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-            {Page}
-          </motion.div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="mt-10 border-t" style={{ borderColor: border }}>
-        <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-          <p className="text-xs" style={{ color: "#b7a77b" }}>
-            © {new Date().getFullYear()} San Andreas District Court. All rights reserved.
-          </p>
-          <p className="text-xs" style={{ color: "#8c7a3f" }}>Theme: black with gold letters and trim.</p>
-        </div>
-      </footer>
-    </div>
-  );
 }
