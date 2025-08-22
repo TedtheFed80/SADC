@@ -6,47 +6,63 @@
   <title>San Andreas District Court Judge - John Gamble</title>
   <meta name="description" content="Official site of San Andreas District Court Judge John Gamble." />
   <style>
+    :root{
+      --bg:#000000; --gold:#FFD700; --gold-2:#e6c200; --line:#FFD700; --bg-2:#090909; --bg-3:#111;
+    }
+    *{box-sizing:border-box}
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #000000;
-      color: #FFD700;
+      background-color: var(--bg);
+      color: var(--gold);
     }
     header {
-      background-color: #000000;
+      background-color: var(--bg);
       text-align: center;
-      padding: 2rem 1rem;
-      border-bottom: 2px solid #FFD700;
+      padding: 2rem 1rem 1.2rem;
+      border-bottom: 2px solid var(--line);
     }
-    header h1 {
-      margin: 0;
-      font-size: 2.2rem;
-    }
-    header h2 {
-      margin: 0.5rem 0 0;
-      font-size: 1.5rem;
-      font-weight: normal;
-    }
-    .tabs { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
-    .tab-btn { background: transparent; color: #FFD700; border: 1px solid #FFD700; padding: .6rem 1rem; border-radius: 999px; cursor: pointer; }
-    .tab-btn.active, .tab-btn:focus { outline: none; background: #FFD700; color: #000; }
-    .tab-panel { display: none; padding: 2rem; max-width: 1000px; margin: auto; }
+    header h1 { margin: 0; font-size: 2.2rem; }
+    header h2 { margin: .5rem 0 0; font-size: 1.5rem; font-weight: normal; }
+    .tabs { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; margin: 1rem auto; padding:0 1rem; }
+    .tab-btn { background: transparent; color: var(--gold); border: 1px solid var(--line); padding: .6rem 1rem; border-radius: 999px; cursor: pointer; }
+    .tab-btn.active, .tab-btn:focus { outline: none; background: var(--gold); color: #000; }
+    .tab-panel { display: none; padding: 2rem 1rem; max-width: 1100px; margin: auto; }
     .tab-panel.active { display: block; }
-    .table-wrap { overflow-x: auto; border: 1px solid #FFD700; border-radius: 8px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
     table { width: 100%; border-collapse: collapse; }
-    th, td { padding: .8rem 1rem; text-align: left; border: 1px solid #FFD700; }
-    thead th { background: #111; }
-    tbody tr:nth-child(odd) { background: #090909; }
-    form input, form textarea { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border-radius: 5px; border: none; }
-    form button { background-color: #FFD700; color: #000; border: none; padding: 0.6rem 1rem; border-radius: 5px; cursor: pointer; }
-    form button:hover { background-color: #e6c200; }
-    footer { text-align: center; padding: 1rem; border-top: 2px solid #FFD700; margin-top: 2rem; }
-      /* Docket controls */
+    th, td { padding: .8rem 1rem; text-align: left; border: 1px solid var(--line); vertical-align: top; }
+    thead th { background: var(--bg-3); position: sticky; top:0; }
+    tbody tr:nth-child(odd) { background: var(--bg-2); }
+    form input, form select, form textarea {
+      width: 100%; padding: 0.6rem 0.7rem; margin-bottom: 1rem; border-radius: 6px; border: 1px solid var(--line);
+      background:#000; color:var(--gold);
+    }
+    form input::file-selector-button{
+      background:var(--gold); color:#000; border:none; padding:.5rem .8rem; border-radius:6px; margin-right:.6rem; cursor:pointer;
+    }
+    form button, .btn {
+      background-color: var(--gold); color: #000; border: none; padding: 0.6rem 1rem; border-radius: 7px; cursor: pointer;
+    }
+    form button:hover, .btn:hover { background-color: var(--gold-2); }
+    footer { text-align: center; padding: 1rem; border-top: 2px solid var(--line); margin-top: 2rem; }
     .controls { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin-top:1rem; }
-    .ghost { background:transparent; color:#FFD700; border:1px solid #FFD700; padding:.6rem 1rem; border-radius:5px; cursor:pointer; }
+    .ghost { background:transparent; color:var(--gold); border:1px solid var(--line); padding:.6rem 1rem; border-radius:7px; cursor:pointer; }
     .ghost:hover { background:#1a1a1a; }
-    .import-label { display:inline-flex; align-items:center; gap:.4rem; border:1px dashed #FFD700; padding:.5rem .7rem; border-radius:6px; cursor:pointer; }
+    .import-label { display:inline-flex; align-items:center; gap:.4rem; border:1px dashed var(--line); padding:.5rem .7rem; border-radius:7px; cursor:pointer; }
     .import-label input { display:none; }
+    .hint { font-size:.9rem; opacity:.9; }
+    .row-actions { display:flex; gap:.4rem; flex-wrap:wrap; }
+    .pill { display:inline-block; padding:.25rem .55rem; border:1px solid var(--line); border-radius:999px; font-size:.8rem; }
+    .two-col { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; }
+    .three-col { display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; }
+    @media (max-width: 800px){
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .tabs { justify-content: flex-start; }
+    }
+    .charcount { font-size:.85rem; opacity:.85; text-align:right; margin-top:-.8rem; margin-bottom:1rem; }
+    .divider { border-top:1px solid var(--line); margin:1.2rem 0; opacity:.6; }
+    .sr-only { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
   </style>
 </head>
 <body>
@@ -55,16 +71,32 @@
     <h2>Hon. John Gamble</h2>
   </header>
 
-  <div class="tabs">
+  <nav class="tabs" aria-label="Primary">
     <button class="tab-btn active" data-tab="docket">Active Court Docket</button>
+    <button class="tab-btn" data-tab="warrants">Warrant Application</button>
     <button class="tab-btn" data-tab="availability">Availability</button>
     <button class="tab-btn" data-tab="contact">Contact</button>
-  </div>
+  </nav>
 
-  <div id="docket" class="tab-panel active">
+  <!-- DOCKET -->
+  <section id="docket" class="tab-panel active" aria-labelledby="docket-tab">
     <h2>Active Court Docket</h2>
     <p>Add or remove cases using the form below. Changes are saved in your browser.</p>
-    <div class="table-wrap">
+
+    <div class="two-col">
+      <div>
+        <label class="sr-only" for="docketSearch">Search docket</label>
+        <input id="docketSearch" type="search" placeholder="Search by case #, defendant, ADA, or defense…" />
+      </div>
+      <div class="controls" style="justify-content:flex-end">
+        <button type="button" id="clearDocket" class="ghost">Clear All</button>
+        <button type="button" id="exportDocketJSON" class="ghost">Export JSON</button>
+        <button type="button" id="exportDocketCSV" class="ghost">Export CSV</button>
+        <label class="import-label">Import <input id="importDocket" type="file" accept="application/json" /></label>
+      </div>
+    </div>
+
+    <div class="table-wrap" role="region" aria-live="polite" aria-label="Docket Table">
       <table>
         <thead>
           <tr>
@@ -78,43 +110,122 @@
         <tbody id="docketBody"><!-- rows render here --></tbody>
       </table>
     </div>
+
     <h3>Add New Case</h3>
-    <form id="addCaseForm">
-      <input type="text" id="caseNum" placeholder="Case #" required>
-      <input type="text" id="defendant" placeholder="Defendant" required>
-      <input type="text" id="ada" placeholder="ADA" required>
+    <form id="addCaseForm" autocomplete="off">
+      <div class="three-col">
+        <input type="text" id="caseNum" placeholder="Case #" required>
+        <input type="text" id="defendant" placeholder="Defendant" required>
+        <input type="text" id="ada" placeholder="ADA" required>
+      </div>
       <input type="text" id="defense" placeholder="Defense Attorney" required>
       <button type="submit">Add Case</button>
     </form>
-    <div class="controls">
-      <button type="button" id="clearDocket" class="ghost">Clear All</button>
-      <button type="button" id="exportDocket" class="ghost">Export</button>
-      <label class="import-label">Import <input id="importDocket" type="file" accept="application/json" /></label>
-    </div>
-  </div>
+  </section>
 
-  <div id="availability" class="tab-panel">
+  <!-- WARRANTS -->
+  <section id="warrants" class="tab-panel" aria-labelledby="warrants-tab">
+    <h2>Warrant Application</h2>
+    <p class="hint">Officers can draft and submit a warrant package. Submissions are stored locally; you can export a JSON bundle for records.</p>
+
+    <form id="warrantForm">
+      <div class="three-col">
+        <div>
+          <label for="officerName">Officer Name</label>
+          <input id="officerName" type="text" placeholder="e.g., Dep. T. McDaniels" required>
+        </div>
+        <div>
+          <label for="department">Department</label>
+          <select id="department" required>
+            <option value="" disabled selected>Select department</option>
+            <option>LSPD</option>
+            <option>BCSO</option>
+            <option>SASP</option>
+            <option>DOJ</option>
+          </select>
+        </div>
+        <div>
+          <label for="submitDate">Date</label>
+          <input id="submitDate" type="date" required>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <label for="defName">Defendant Name</label>
+          <input id="defName" type="text" placeholder="Full name" required>
+        </div>
+        <div>
+          <label for="defCID">Defendant CID</label>
+          <input id="defCID" type="text" inputmode="numeric" pattern="[0-9]{1,12}" placeholder="Numbers only" required>
+        </div>
+      </div>
+
+      <div>
+        <label for="pc">Probable Cause Statement</label>
+        <textarea id="pc" rows="6" placeholder="Detail specific facts establishing probable cause…" minlength="50" required></textarea>
+        <div class="charcount"><span id="pcCount">0</span> / 2000</div>
+      </div>
+
+      <div>
+        <label for="evidence">Evidence Upload (video/images/PDF; multiple allowed)</label>
+        <input id="evidence" type="file" accept="video/*,image/*,application/pdf" multiple>
+        <div class="hint">Files are listed and encoded to this device only. You can remove any before saving.</div>
+      </div>
+
+      <div class="controls">
+        <button type="button" id="saveDraft" class="ghost">Save Draft</button>
+        <button type="submit" class="btn">Submit & Export</button>
+        <button type="button" id="clearWarrant" class="ghost">Clear Form</button>
+      </div>
+    </form>
+
+    <div class="divider"></div>
+
+    <h3>My Warrant Packages</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Defendant</th>
+            <th>CID</th>
+            <th>Officer</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Files</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="warrantBody"><!-- rows --></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- AVAILABILITY -->
+  <section id="availability" class="tab-panel">
     <h2>Availability</h2>
     <ul>
-      <li><strong>Mon</strong>: 8pm EST-10pm EST</li>
+      <li><strong>Mon</strong>: 8pm EST–10pm EST</li>
       <li><strong>Tue</strong>: Off</li>
-      <li><strong>Wed</strong>: 8pm EST-10pm EST</li>
+      <li><strong>Wed</strong>: 8pm EST–10pm EST</li>
       <li><strong>Thu</strong>: Off</li>
-      <li><strong>Fri</strong>: 8pm EST-10pm EST</li>
-      <li><strong>Sat</strong>: 12pm EST-TBD</li>
-      <li><strong>Sun</strong>: 12pm EST-TBD</li>
+      <li><strong>Fri</strong>: 8pm EST–10pm EST</li>
+      <li><strong>Sat</strong>: 12pm EST–TBD</li>
+      <li><strong>Sun</strong>: 12pm EST–TBD</li>
     </ul>
-  </div>
+  </section>
 
-  <div id="contact" class="tab-panel">
+  <!-- CONTACT -->
+  <section id="contact" class="tab-panel">
     <h2>Contact</h2>
-    <form>
+    <form onsubmit="alert('Message sent. (Demo)'); this.reset(); return false;">
       <input type="text" placeholder="Name" required>
       <input type="email" placeholder="Email" required>
       <textarea placeholder="Message" required></textarea>
       <button type="submit">Send</button>
     </form>
-  </div>
+  </section>
 
   <footer>
     <small>© <span id="year"></span> Hon. John Gamble. All rights reserved.</small>
@@ -122,7 +233,6 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
-
     // ===== Tabs =====
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabPanels = document.querySelectorAll('.tab-panel');
@@ -136,7 +246,24 @@
       });
     });
 
-    // ===== Docket management with localStorage =====
+    // ===== Utilities =====
+    const dt = () => new Date().toISOString();
+    const fmt = (d) => new Date(d).toLocaleString();
+    const toCSV = (rows) => {
+      if(!rows.length) return '';
+      const headers = Object.keys(rows[0]);
+      const escape = (v) => `"${String(v ?? '').replace(/"/g,'""')}"`;
+      const body = rows.map(r => headers.map(h => escape(r[h])).join(',')).join('\n');
+      return headers.join(',') + '\n' + body;
+    }
+    function downloadBlob(filename, blob){
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ===== DOCKET (with search, edit, CSV) =====
     const tbody = document.getElementById('docketBody');
     const form = document.getElementById('addCaseForm');
     const caseNum = document.getElementById('caseNum');
@@ -144,44 +271,88 @@
     const ada = document.getElementById('ada');
     const defense = document.getElementById('defense');
     const clearBtn = document.getElementById('clearDocket');
-    const exportBtn = document.getElementById('exportDocket');
+    const exportJSONBtn = document.getElementById('exportDocketJSON');
+    const exportCSVBtn = document.getElementById('exportDocketCSV');
     const importInput = document.getElementById('importDocket');
+    const searchInput = document.getElementById('docketSearch');
 
-    const STORAGE_KEY = 'judge_gamble_docket_v1';
+    const STORAGE_KEY = 'judge_gamble_docket_v2';
 
     function loadDocket(){
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if(!raw){
-          const seed = [
-            {caseNum:'36512', defendant:'Jay Kennedy', ada:'Ethan Brooks', defense:'—'}
-          ];
+          const seed = [{caseNum:'36512', defendant:'Jay Kennedy', ada:'Ethan Brooks', defense:'—'}];
           localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
           return seed;
         }
         return JSON.parse(raw);
       } catch(e){ console.error('Failed to load docket', e); return []; }
     }
-
     function saveDocket(list){ localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); }
 
-    function render(){
+    function renderDocket(filter=''){
       const list = loadDocket();
+      const q = filter.trim().toLowerCase();
+      const shown = q ? list.filter(r =>
+        (r.caseNum || '').toLowerCase().includes(q) ||
+        (r.defendant || '').toLowerCase().includes(q) ||
+        (r.ada || '').toLowerCase().includes(q) ||
+        (r.defense || '').toLowerCase().includes(q)
+      ) : list;
+
       tbody.innerHTML = '';
-      list.forEach((row, i) => {
+      shown.forEach((row, i) => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.caseNum}</td>
-          <td>${row.defendant}</td>
-          <td>${row.ada}</td>
-          <td>${row.defense}</td>
-          <td><button class=\"ghost del-btn\" data-index=\"${i}\">Remove</button></td>
+
+        const makeCell = (key) => {
+          const td = document.createElement('td');
+          const span = document.createElement('span');
+          span.textContent = row[key] ?? '';
+          span.dataset.key = key;
+          span.dataset.index = i;
+
+          const editBtn = document.createElement('button');
+          editBtn.className = 'ghost';
+          editBtn.textContent = 'Edit';
+          editBtn.style.marginLeft = '.6rem';
+
+          editBtn.addEventListener('click', () => {
+            const current = span.textContent;
+            const input = document.createElement('input');
+            input.value = current;
+            input.addEventListener('keydown', ev => {
+              if(ev.key === 'Enter'){ input.blur(); }
+            });
+            input.addEventListener('blur', () => {
+              const listAll = loadDocket();
+              listAll[i][key] = input.value.trim();
+              saveDocket(listAll);
+              renderDocket(searchInput.value);
+            });
+            td.replaceChildren(input);
+            input.focus();
+          });
+
+          td.append(span, editBtn);
+          return td;
+        };
+
+        tr.appendChild(makeCell('caseNum'));
+        tr.appendChild(makeCell('defendant'));
+        tr.appendChild(makeCell('ada'));
+        tr.appendChild(makeCell('defense'));
+
+        const actionTd = document.createElement('td');
+        actionTd.className = 'row-actions';
+        actionTd.innerHTML = `
+          <button class="ghost del-btn" data-index="${i}">Remove</button>
         `;
+        tr.appendChild(actionTd);
         tbody.appendChild(tr);
       });
     }
 
-    // Add row
     if(form){
       form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -194,11 +365,10 @@
         });
         saveDocket(list);
         form.reset();
-        render();
+        renderDocket(searchInput.value);
       });
     }
 
-    // Remove row (event delegation)
     if(tbody){
       tbody.addEventListener('click', (e) => {
         const btn = e.target.closest('.del-btn');
@@ -207,29 +377,27 @@
         const list = loadDocket();
         list.splice(idx, 1);
         saveDocket(list);
-        render();
+        renderDocket(searchInput.value);
       });
     }
-
-    // Clear all
     if(clearBtn){
       clearBtn.addEventListener('click', () => {
-        if(confirm('Clear the entire docket?')){ saveDocket([]); render(); }
+        if(confirm('Clear the entire docket?')){ saveDocket([]); renderDocket(''); }
       });
     }
-
-    // Export
-    if(exportBtn){
-      exportBtn.addEventListener('click', () => {
+    if(exportJSONBtn){
+      exportJSONBtn.addEventListener('click', () => {
         const blob = new Blob([JSON.stringify(loadDocket(), null, 2)], {type: 'application/json'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'docket.json'; a.click();
-        URL.revokeObjectURL(url);
+        downloadBlob('docket.json', blob);
       });
     }
-
-    // Import
+    if(exportCSVBtn){
+      exportCSVBtn.addEventListener('click', () => {
+        const csv = toCSV(loadDocket());
+        const blob = new Blob([csv], {type: 'text/csv'});
+        downloadBlob('docket.csv', blob);
+      });
+    }
     if(importInput){
       importInput.addEventListener('change', async (e) => {
         const file = e.target.files?.[0];
@@ -239,7 +407,7 @@
           const data = JSON.parse(text);
           if(Array.isArray(data)){
             saveDocket(data.filter(r => r && r.caseNum));
-            render();
+            renderDocket(searchInput.value);
           } else {
             alert('Invalid file. Expected an array of docket items.');
           }
@@ -248,9 +416,181 @@
         } finally { e.target.value = ''; }
       });
     }
+    if(searchInput){
+      searchInput.addEventListener('input', (e) => renderDocket(e.target.value));
+    }
 
-    // Initial load
-    render();
+    // ===== WARRANT APPLICATIONS =====
+    const WARR_KEY = 'judge_gamble_warrants_v1';
+    const warrantForm = document.getElementById('warrantForm');
+    const officerName = document.getElementById('officerName');
+    const department = document.getElementById('department');
+    const submitDate = document.getElementById('submitDate');
+    const defName = document.getElementById('defName');
+    const defCID = document.getElementById('defCID');
+    const pc = document.getElementById('pc');
+    const pcCount = document.getElementById('pcCount');
+    const evidence = document.getElementById('evidence');
+    const saveDraftBtn = document.getElementById('saveDraft');
+    const clearWarrantBtn = document.getElementById('clearWarrant');
+    const warrantBody = document.getElementById('warrantBody');
+
+    // default date to today
+    if(submitDate && !submitDate.value) {
+      const today = new Date();
+      submitDate.valueAsDate = today;
+    }
+
+    pc.addEventListener('input', () => {
+      const len = pc.value.length;
+      pcCount.textContent = len;
+      if(len > 2000) pc.value = pc.value.slice(0, 2000);
+    });
+
+    function loadWarrants(){
+      try{
+        const raw = localStorage.getItem(WARR_KEY);
+        return raw ? JSON.parse(raw) : [];
+      }catch{ return []; }
+    }
+    function saveWarrants(list){
+      localStorage.setItem(WARR_KEY, JSON.stringify(list));
+    }
+
+    async function filesToData(files){
+      const arr = [];
+      for(const f of files){
+        const b64 = await new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(f);
+        });
+        arr.push({ name:f.name, type:f.type, size:f.size, dataURL:b64 });
+      }
+      return arr;
+    }
+
+    function clearWarrantForm(){
+      warrantForm.reset();
+      pcCount.textContent = '0';
+      submitDate.valueAsDate = new Date();
+    }
+
+    function renderWarrants(){
+      const list = loadWarrants();
+      warrantBody.innerHTML = '';
+      list.forEach((w, i) => {
+        const tr = document.createElement('tr');
+        const filesLabel = w.files?.length ? `${w.files.length} file(s)` : '—';
+        tr.innerHTML = `
+          <td>${w.id}</td>
+          <td>${w.defName}</td>
+          <td>${w.defCID}</td>
+          <td>${w.officerName}</td>
+          <td><span class="pill">${w.status}</span></td>
+          <td>${fmt(w.createdAt)}</td>
+          <td>${filesLabel}</td>
+          <td class="row-actions">
+            <button class="ghost" data-act="export" data-idx="${i}">Export</button>
+            <button class="ghost" data-act="duplicate" data-idx="${i}">Duplicate</button>
+            <button class="ghost" data-act="delete" data-idx="${i}">Delete</button>
+          </td>
+        `;
+        warrantBody.appendChild(tr);
+      });
+    }
+
+    warrantBody.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-act]');
+      if(!btn) return;
+      const idx = Number(btn.dataset.idx);
+      const act = btn.dataset.act;
+      const list = loadWarrants();
+      const item = list[idx];
+      if(!item) return;
+
+      if(act === 'export'){
+        const blob = new Blob([JSON.stringify(item, null, 2)], {type:'application/json'});
+        downloadBlob(`warrant_${item.id}.json`, blob);
+      } else if(act === 'duplicate'){
+        const copy = {...item, id: crypto.randomUUID(), status:'Draft', createdAt: dt()};
+        list.unshift(copy);
+        saveWarrants(list);
+        renderWarrants();
+      } else if(act === 'delete'){
+        if(confirm('Delete this warrant package?')){
+          list.splice(idx,1);
+          saveWarrants(list);
+          renderWarrants();
+        }
+      }
+    });
+
+    saveDraftBtn.addEventListener('click', async () => {
+      if(!officerName.value || !department.value || !defName.value || !defCID.value || !pc.value){
+        if(!confirm('Some required fields are empty. Save as draft anyway?')) return;
+      }
+      const files = await filesToData(evidence.files || []);
+      const list = loadWarrants();
+      const id = crypto.randomUUID();
+      const record = {
+        id,
+        officerName: officerName.value.trim(),
+        department: department.value,
+        submitDate: submitDate.value,
+        defName: defName.value.trim(),
+        defCID: defCID.value.trim(),
+        probableCause: pc.value.trim(),
+        files,
+        status: 'Draft',
+        createdAt: dt()
+      };
+      list.unshift(record);
+      saveWarrants(list);
+      renderWarrants();
+      alert('Draft saved locally.');
+    });
+
+    warrantForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if(pc.value.trim().length < 50){
+        alert('Probable cause must be at least 50 characters.');
+        return;
+      }
+      const files = await filesToData(evidence.files || []);
+      const list = loadWarrants();
+      const id = crypto.randomUUID();
+      const record = {
+        id,
+        officerName: officerName.value.trim(),
+        department: department.value,
+        submitDate: submitDate.value,
+        defName: defName.value.trim(),
+        defCID: defCID.value.trim(),
+        probableCause: pc.value.trim(),
+        files,
+        status: 'Submitted',
+        createdAt: dt()
+      };
+      list.unshift(record);
+      saveWarrants(list);
+      renderWarrants();
+
+      // Export JSON bundle for record
+      const blob = new Blob([JSON.stringify(record, null, 2)], {type:'application/json'});
+      downloadBlob(`warrant_${id}.json`, blob);
+
+      alert('Warrant submitted locally and exported as JSON. (No server connected.)');
+      clearWarrantForm();
+    });
+
+    clearWarrantBtn.addEventListener('click', () => {
+      if(confirm('Clear the form?')) clearWarrantForm();
+    });
+
+    // ===== Init =====
+    renderDocket('');
+    renderWarrants();
   </script>
 </body>
 </html>
