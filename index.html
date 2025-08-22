@@ -157,7 +157,11 @@
         </div>
         <div>
           <label for="defCID">Defendant CID</label>
-          <input id="defCID" type="text" inputmode="numeric" pattern="[0-9]{1,12}" placeholder="Numbers only" required>
+         <input id="defCID" type="text"
+       pattern="^[A-Za-z0-9]{3,12}$"
+       title="Use 3–12 letters/numbers, e.g., ABC12345"
+       placeholder="e.g., ABC12345"
+       required>
         </div>
       </div>
 
