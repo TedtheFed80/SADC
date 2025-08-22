@@ -1,1 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>San Andreas District Court Judge - John Gamble</title>
+  <meta name="description" content="Official site of San Andreas District Court Judge John Gamble." />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000000;
+      color: #FFD700;
+    }
+    header {
+      background-color: #000000;
+      text-align: center;
+      padding: 2rem 1rem;
+      border-bottom: 2px solid #FFD700;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+    }
+    header h2 {
+      margin: 0.5rem 0 0;
+      font-size: 1.5rem;
+      font-weight: normal;
+    }
+    .tabs { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem; }
+    .tab-btn { background: transparent; color: #FFD700; border: 1px solid #FFD700; padding: .6rem 1rem; border-radius: 999px; cursor: pointer; }
+    .tab-btn.active, .tab-btn:focus { outline: none; background: #FFD700; color: #000; }
+    .tab-panel { display: none; padding: 2rem; max-width: 1000px; margin: auto; }
+    .tab-panel.active { display: block; }
+    .table-wrap { overflow-x: auto; border: 1px solid #FFD700; border-radius: 8px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: .8rem 1rem; text-align: left; border: 1px solid #FFD700; }
+    thead th { background: #111; }
+    tbody tr:nth-child(odd) { background: #090909; }
+    form input, form textarea { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border-radius: 5px; border: none; }
+    form button { background-color: #FFD700; color: #000; border: none; padding: 0.6rem 1rem; border-radius: 5px; cursor: pointer; }
+    form button:hover { background-color: #e6c200; }
+    footer { text-align: center; padding: 1rem; border-top: 2px solid #FFD700; margin-top: 2rem; }
+      /* Docket controls */
+    .controls { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin-top:1rem; }
+    .ghost { background:transparent; color:#FFD700; border:1px solid #FFD700; padding:.6rem 1rem; border-radius:5px; cursor:pointer; }
+    .ghost:hover { background:#1a1a1a; }
+    .import-label { display:inline-flex; align-items:center; gap:.4rem; border:1px dashed #FFD700; padding:.5rem .7rem; border-radius:6px; cursor:pointer; }
+    .import-label input { display:none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>San Andreas District Court Judge</h1>
+    <h2>Hon. John Gamble</h2>
+  </header>
 
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="docket">Active Court Docket</button>
+    <button class="tab-btn" data-tab="availability">Availability</button>
+    <button class="tab-btn" data-tab="contact">Contact</button>
+  </div>
+
+  <div id="docket" class="tab-panel active">
+    <h2>Active Court Docket</h2>
+    <p>Add or remove cases using the form below. Changes are saved in your browser.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Case #</th>
+            <th>Defendant</th>
+            <th>ADA</th>
+            <th>Defense Attorney</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="docketBody"><!-- rows render here --></tbody>
+      </table>
+    </div>
+    <h3>Add New Case</h3>
+    <form id="addCaseForm">
+      <input type="text" id="caseNum" placeholder="Case #" required>
+      <input type="text" id="defendant" placeholder="Defendant" required>
+      <input type="text" id="ada" placeholder="ADA" required>
+      <input type="text" id="defense" placeholder="Defense Attorney" required>
+      <button type="submit">Add Case</button>
+    </form>
+    <div class="controls">
+      <button type="button" id="clearDocket" class="ghost">Clear All</button>
+      <button type="button" id="exportDocket" class="ghost">Export</button>
+      <label class="import-label">Import <input id="importDocket" type="file" accept="application/json" /></label>
+    </div>
+  </div>
+
+  <div id="availability" class="tab-panel">
+    <h2>Availability</h2>
+    <ul>
+      <li><strong>Mon</strong>: 8pm EST-10pm EST</li>
+      <li><strong>Tue</strong>: Off</li>
+      <li><strong>Wed</strong>: 8pm EST-10pm EST</li>
+      <li><strong>Thu</strong>: Off</li>
+      <li><strong>Fri</strong>: 8pm EST-10pm EST</li>
+      <li><strong>Sat</strong>: 12pm EST-TBD</li>
+      <li><strong>Sun</strong>: 12pm EST-TBD</li>
+    </ul>
+  </div>
+
+  <div id="contact" class="tab-panel">
+    <h2>Contact</h2>
+    <form>
+      <input type="text" placeholder="Name" required>
+      <input type="email" placeholder="Email" required>
+      <textarea placeholder="Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <footer>
+    <small>© <span id="year"></span> Hon. John Gamble. All rights reserved.</small>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ===== Tabs =====
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-tab');
+        tabButtons.forEach(b => b.classList.remove('active'));
+        tabPanels.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(target).classList.add('active');
+      });
+    });
+
+    // ===== Docket management with localStorage =====
+    const tbody = document.getElementById('docketBody');
+    const form = document.getElementById('addCaseForm');
+    const caseNum = document.getElementById('caseNum');
+    const defendant = document.getElementById('defendant');
+    const ada = document.getElementById('ada');
+    const defense = document.getElementById('defense');
+    const clearBtn = document.getElementById('clearDocket');
+    const exportBtn = document.getElementById('exportDocket');
+    const importInput = document.getElementById('importDocket');
+
+    const STORAGE_KEY = 'judge_gamble_docket_v1';
+
+    function loadDocket(){
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw){
+          const seed = [
+            {caseNum:'36512', defendant:'Jay Kennedy', ada:'Ethan Brooks', defense:'—'}
+          ];
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
+          return seed;
+        }
+        return JSON.parse(raw);
+      } catch(e){ console.error('Failed to load docket', e); return []; }
+    }
+
+    function saveDocket(list){ localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); }
+
+    function render(){
+      const list = loadDocket();
+      tbody.innerHTML = '';
+      list.forEach((row, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.caseNum}</td>
+          <td>${row.defendant}</td>
+          <td>${row.ada}</td>
+          <td>${row.defense}</td>
+          <td><button class=\"ghost del-btn\" data-index=\"${i}\">Remove</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Add row
+    if(form){
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const list = loadDocket();
+        list.push({
+          caseNum: caseNum.value.trim(),
+          defendant: defendant.value.trim(),
+          ada: ada.value.trim(),
+          defense: defense.value.trim()
+        });
+        saveDocket(list);
+        form.reset();
+        render();
+      });
+    }
+
+    // Remove row (event delegation)
+    if(tbody){
+      tbody.addEventListener('click', (e) => {
+        const btn = e.target.closest('.del-btn');
+        if(!btn) return;
+        const idx = Number(btn.getAttribute('data-index'));
+        const list = loadDocket();
+        list.splice(idx, 1);
+        saveDocket(list);
+        render();
+      });
+    }
+
+    // Clear all
+    if(clearBtn){
+      clearBtn.addEventListener('click', () => {
+        if(confirm('Clear the entire docket?')){ saveDocket([]); render(); }
+      });
+    }
+
+    // Export
+    if(exportBtn){
+      exportBtn.addEventListener('click', () => {
+        const blob = new Blob([JSON.stringify(loadDocket(), null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'docket.json'; a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    // Import
+    if(importInput){
+      importInput.addEventListener('change', async (e) => {
+        const file = e.target.files?.[0];
+        if(!file) return;
+        const text = await file.text();
+        try {
+          const data = JSON.parse(text);
+          if(Array.isArray(data)){
+            saveDocket(data.filter(r => r && r.caseNum));
+            render();
+          } else {
+            alert('Invalid file. Expected an array of docket items.');
+          }
+        } catch(err){
+          alert('Could not read JSON file.');
+        } finally { e.target.value = ''; }
+      });
+    }
+
+    // Initial load
+    render();
+  </script>
+</body>
+</html>
