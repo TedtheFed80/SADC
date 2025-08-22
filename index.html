@@ -157,11 +157,11 @@
         </div>
         <div>
           <label for="defCID">Defendant CID</label>
-         <input id="defCID" type="text"
-       pattern="^[A-Za-z0-9]{3,12}$"
-       title="Use 3–12 letters/numbers, e.g., ABC12345"
-       placeholder="e.g., ABC12345"
-       required>
+          <input id="defCID" type="text"
+                 pattern="^[A-Za-z0-9]{3,12}$"
+                 title="Use 3–12 letters/numbers, e.g., ABC12345"
+                 placeholder="e.g., ABC12345"
+                 required>
         </div>
       </div>
 
@@ -236,7 +236,19 @@
   </footer>
 
   <script>
+    /* ===== Item 3: UUID fallback (ensure before any calls) ===== */
+    if (!('randomUUID' in crypto)) {
+      crypto.randomUUID = function(){
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+          const r = Math.random() * 16 | 0;
+          const v = c === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+      };
+    }
+
     document.getElementById('year').textContent = new Date().getFullYear();
+
     // ===== Tabs =====
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabPanels = document.querySelectorAll('.tab-panel');
@@ -261,14 +273,14 @@
       return headers.join(',') + '\n' + body;
     }
     function downloadBlob(filename, blob){
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);     // ensure in DOM for some browsers
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 0);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);     // ensure in DOM for some browsers
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 0);
     }
 
     // ===== DOCKET (with search, edit, CSV) =====
@@ -353,11 +365,9 @@
 
         const actionTd = document.createElement('td');
         actionTd.className = 'row-actions';
-        actionTd.innerHTML = `
-          <button class="ghost del-btn" data-index="${i}">Remove</button>
-        `;
-        tr.appendChild(actionTd);
+        actionTd.innerHTML = `<button class="ghost del-btn" data-index="${i}">Remove</button>`;
         tbody.appendChild(tr);
+        tr.appendChild(actionTd);
       });
     }
 
@@ -428,177 +438,196 @@
       searchInput.addEventListener('input', (e) => renderDocket(e.target.value));
     }
 
-    // ===== WARRANT APPLICATIONS =====
-    const WARR_KEY = 'judge_gamble_warrants_v1';
-    const warrantForm = document.getElementById('warrantForm');
-    const officerName = document.getElementById('officerName');
-    const department = document.getElementById('department');
-    const submitDate = document.getElementById('submitDate');
-    const defName = document.getElementById('defName');
-    const defCID = document.getElementById('defCID');
-    const pc = document.getElementById('pc');
-    const pcCount = document.getElementById('pcCount');
-    const evidence = document.getElementById('evidence');
-    const saveDraftBtn = document.getElementById('saveDraft');
-    const clearWarrantBtn = document.getElementById('clearWarrant');
-    const warrantBody = document.getElementById('warrantBody');
+    // ===== WARRANTS (wrapped init) =====
+    function initWarrants(){
+      try {
+        const WARR_KEY = 'judge_gamble_warrants_v1';
+        const warrantForm   = document.getElementById('warrantForm');
+        const officerName   = document.getElementById('officerName');
+        const department    = document.getElementById('department');
+        const submitDate    = document.getElementById('submitDate');
+        const defName       = document.getElementById('defName');
+        const defCID        = document.getElementById('defCID');
+        const pc            = document.getElementById('pc');
+        const pcCount       = document.getElementById('pcCount');
+        const evidence      = document.getElementById('evidence');
+        const saveDraftBtn  = document.getElementById('saveDraft');
+        const clearWarrantBtn = document.getElementById('clearWarrant');
+        const warrantBody   = document.getElementById('warrantBody');
 
-    // default date to today
-    if(submitDate && !submitDate.value) {
-      const today = new Date();
-      submitDate.valueAsDate = today;
-    }
+        if (!warrantForm || !saveDraftBtn || !clearWarrantBtn || !warrantBody) return;
 
-    pc.addEventListener('input', () => {
-      const len = pc.value.length;
-      pcCount.textContent = len;
-      if(len > 2000) pc.value = pc.value.slice(0, 2000);
-    });
-
-    function loadWarrants(){
-      try{
-        const raw = localStorage.getItem(WARR_KEY);
-        return raw ? JSON.parse(raw) : [];
-      }catch{ return []; }
-    }
-    function saveWarrants(list){
-      localStorage.setItem(WARR_KEY, JSON.stringify(list));
-    }
-
-    async function filesToData(files){
-      const arr = [];
-      for(const f of files){
-        const b64 = await new Promise(resolve => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.readAsDataURL(f);
-        });
-        arr.push({ name:f.name, type:f.type, size:f.size, dataURL:b64 });
-      }
-      return arr;
-    }
-
-    function clearWarrantForm(){
-      warrantForm.reset();
-      pcCount.textContent = '0';
-      submitDate.valueAsDate = new Date();
-    }
-
-    function renderWarrants(){
-      const list = loadWarrants();
-      warrantBody.innerHTML = '';
-      list.forEach((w, i) => {
-        const tr = document.createElement('tr');
-        const filesLabel = w.files?.length ? `${w.files.length} file(s)` : '—';
-        tr.innerHTML = `
-          <td>${w.id}</td>
-          <td>${w.defName}</td>
-          <td>${w.defCID}</td>
-          <td>${w.officerName}</td>
-          <td><span class="pill">${w.status}</span></td>
-          <td>${fmt(w.createdAt)}</td>
-          <td>${filesLabel}</td>
-          <td class="row-actions">
-            <button class="ghost" data-act="export" data-idx="${i}">Export</button>
-            <button class="ghost" data-act="duplicate" data-idx="${i}">Duplicate</button>
-            <button class="ghost" data-act="delete" data-idx="${i}">Delete</button>
-          </td>
-        `;
-        warrantBody.appendChild(tr);
-      });
-    }
-
-    warrantBody.addEventListener('click', (e) => {
-      const btn = e.target.closest('button[data-act]');
-      if(!btn) return;
-      const idx = Number(btn.dataset.idx);
-      const act = btn.dataset.act;
-      const list = loadWarrants();
-      const item = list[idx];
-      if(!item) return;
-
-      if(act === 'export'){
-        const blob = new Blob([JSON.stringify(item, null, 2)], {type:'application/json'});
-        downloadBlob(`warrant_${item.id}.json`, blob);
-      } else if(act === 'duplicate'){
-        const copy = {...item, id: crypto.randomUUID(), status:'Draft', createdAt: dt()};
-        list.unshift(copy);
-        saveWarrants(list);
-        renderWarrants();
-      } else if(act === 'delete'){
-        if(confirm('Delete this warrant package?')){
-          list.splice(idx,1);
-          saveWarrants(list);
-          renderWarrants();
+        if (submitDate && !submitDate.value) {
+          submitDate.valueAsDate = new Date();
         }
+
+        if (pc && pcCount){
+          pc.addEventListener('input', () => {
+            pcCount.textContent = Math.min(pc.value.length, 2000);
+            if (pc.value.length > 2000) pc.value = pc.value.slice(0, 2000);
+          });
+        }
+
+        function loadWarrants(){
+          try { return JSON.parse(localStorage.getItem(WARR_KEY) || '[]'); }
+          catch { return []; }
+        }
+        function saveWarrants(list){
+          localStorage.setItem(WARR_KEY, JSON.stringify(list));
+        }
+
+        async function filesToData(files){
+          const arr = [];
+          for (const f of files || []) {
+            const dataURL = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(f);
+            });
+            arr.push({ name:f.name, type:f.type, size:f.size, dataURL });
+          }
+          return arr;
+        }
+
+        function clearWarrantForm(){
+          warrantForm.reset();
+          if (pcCount) pcCount.textContent = '0';
+          if (submitDate) submitDate.valueAsDate = new Date();
+        }
+
+        function renderWarrants(){
+          const list = loadWarrants();
+          warrantBody.innerHTML = '';
+          list.forEach((w, i) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${w.id}</td>
+              <td>${w.defName || ''}</td>
+              <td>${w.defCID || ''}</td>
+              <td>${w.officerName || ''}</td>
+              <td><span class="pill">${w.status || 'Draft'}</span></td>
+              <td>${fmt(w.createdAt || new Date())}</td>
+              <td>${(w.files && w.files.length) ? `${w.files.length} file(s)` : '—'}</td>
+              <td class="row-actions">
+                <button class="ghost" data-act="export" data-idx="${i}">Export</button>
+                <button class="ghost" data-act="duplicate" data-idx="${i}">Duplicate</button>
+                <button class="ghost" data-act="delete" data-idx="${i}">Delete</button>
+              </td>
+            `;
+            warrantBody.appendChild(tr);
+          });
+        }
+
+        warrantBody.addEventListener('click', (e) => {
+          const btn = e.target.closest('button[data-act]');
+          if (!btn) return;
+          const idx = Number(btn.dataset.idx);
+          const list = loadWarrants();
+          const item = list[idx]; if (!item) return;
+
+          if (btn.dataset.act === 'export') {
+            const blob = new Blob([JSON.stringify(item, null, 2)], {type:'application/json'});
+            downloadBlob(`warrant_${item.id}.json`, blob);
+          } else if (btn.dataset.act === 'duplicate') {
+            const copy = {...item, id: crypto.randomUUID(), status:'Draft', createdAt: dt()};
+            list.unshift(copy);
+            saveWarrants(list);
+            renderWarrants();
+          } else if (btn.dataset.act === 'delete') {
+            if (confirm('Delete this warrant package?')) {
+              list.splice(idx, 1);
+              saveWarrants(list);
+              renderWarrants();
+            }
+          }
+        });
+
+        saveDraftBtn.addEventListener('click', async () => {
+          try {
+            const files = await filesToData(evidence?.files);
+            const list = loadWarrants();
+            const id = crypto.randomUUID();
+            const record = {
+              id,
+              officerName: officerName?.value?.trim() || '',
+              department: department?.value || '',
+              submitDate: submitDate?.value || '',
+              defName: defName?.value?.trim() || '',
+              defCID: defCID?.value?.trim() || '',
+              probableCause: pc?.value?.trim() || '',
+              files,
+              status: 'Draft',
+              createdAt: dt()
+            };
+            list.unshift(record);
+            saveWarrants(list);
+            renderWarrants();
+            alert('Draft saved locally.');
+          } catch (err) {
+            console.error(err);
+            alert('Could not save draft. See console for details.');
+          }
+        });
+
+        warrantForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          try {
+            if (pc && pc.value.trim().length < 50) {
+              alert('Probable cause must be at least 50 characters.');
+              return;
+            }
+            const cidVal = (defCID?.value || '').trim();
+            if (!/^[A-Za-z0-9]{3,12}$/.test(cidVal)) {
+              alert('Defendant CID must be 3–12 letters/numbers, e.g., ABC12345.');
+              return;
+            }
+
+            const files = await filesToData(evidence?.files);
+            const list = loadWarrants();
+            const id = crypto.randomUUID();
+            const record = {
+              id,
+              officerName: officerName?.value?.trim() || '',
+              department: department?.value || '',
+              submitDate: submitDate?.value || '',
+              defName: defName?.value?.trim() || '',
+              defCID: cidVal,
+              probableCause: pc?.value?.trim() || '',
+              files,
+              status: 'Submitted',
+              createdAt: dt()
+            };
+            list.unshift(record);
+            saveWarrants(list);
+            renderWarrants();
+
+            const blob = new Blob([JSON.stringify(record, null, 2)], {type:'application/json'});
+            downloadBlob(`warrant_${id}.json`, blob);
+
+            alert('Warrant submitted locally and exported as JSON.');
+            clearWarrantForm();
+          } catch (err) {
+            console.error(err);
+            alert('Submit failed. See console for details.');
+          }
+        });
+
+        clearWarrantBtn.addEventListener('click', () => {
+          if (confirm('Clear the form?')) clearWarrantForm();
+        });
+
+        // initial render
+        renderWarrants();
+      } catch (err) {
+        console.error('Warrant init error:', err);
+        alert('There was an error initializing the Warrant tab. See console for details.');
       }
-    });
-
-    saveDraftBtn.addEventListener('click', async () => {
-      if(!officerName.value || !department.value || !defName.value || !defCID.value || !pc.value){
-        if(!confirm('Some required fields are empty. Save as draft anyway?')) return;
-      }
-      const files = await filesToData(evidence.files || []);
-      const list = loadWarrants();
-      const id = crypto.randomUUID();
-      const record = {
-        id,
-        officerName: officerName.value.trim(),
-        department: department.value,
-        submitDate: submitDate.value,
-        defName: defName.value.trim(),
-        defCID: defCID.value.trim(),
-        probableCause: pc.value.trim(),
-        files,
-        status: 'Draft',
-        createdAt: dt()
-      };
-      list.unshift(record);
-      saveWarrants(list);
-      renderWarrants();
-      alert('Draft saved locally.');
-    });
-
-    warrantForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if(pc.value.trim().length < 50){
-        alert('Probable cause must be at least 50 characters.');
-        return;
-      }
-      const files = await filesToData(evidence.files || []);
-      const list = loadWarrants();
-      const id = crypto.randomUUID();
-      const record = {
-        id,
-        officerName: officerName.value.trim(),
-        department: department.value,
-        submitDate: submitDate.value,
-        defName: defName.value.trim(),
-        defCID: defCID.value.trim(),
-        probableCause: pc.value.trim(),
-        files,
-        status: 'Submitted',
-        createdAt: dt()
-      };
-      list.unshift(record);
-      saveWarrants(list);
-      renderWarrants();
-
-      // Export JSON bundle for record
-      const blob = new Blob([JSON.stringify(record, null, 2)], {type:'application/json'});
-      downloadBlob(`warrant_${id}.json`, blob);
-
-      alert('Warrant submitted locally and exported as JSON. (No server connected.)');
-      clearWarrantForm();
-    });
-
-    clearWarrantBtn.addEventListener('click', () => {
-      if(confirm('Clear the form?')) clearWarrantForm();
-    });
+    }
 
     // ===== Init =====
     renderDocket('');
-    renderWarrants();
+    initWarrants();
   </script>
 </body>
 </html>
