@@ -10,59 +10,44 @@
       --bg:#000000; --gold:#FFD700; --gold-2:#e6c200; --line:#FFD700; --bg-2:#090909; --bg-3:#111;
     }
     *{box-sizing:border-box}
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--gold);
-    }
-    header {
-      background-color: var(--bg);
-      text-align: center;
-      padding: 2rem 1rem 1.2rem;
-      border-bottom: 2px solid var(--line);
-    }
-    header h1 { margin: 0; font-size: 2.2rem; }
-    header h2 { margin: .5rem 0 0; font-size: 1.5rem; font-weight: normal; }
-    .tabs { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; margin: 1rem auto; padding:0 1rem; }
-    .tab-btn { background: transparent; color: var(--gold); border: 1px solid var(--line); padding: .6rem 1rem; border-radius: 999px; cursor: pointer; }
-    .tab-btn.active, .tab-btn:focus { outline: none; background: var(--gold); color: #000; }
-    .tab-panel { display: none; padding: 2rem 1rem; max-width: 1100px; margin: auto; }
-    .tab-panel.active { display: block; }
-    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: .8rem 1rem; text-align: left; border: 1px solid var(--line); vertical-align: top; }
-    thead th { background: var(--bg-3); position: sticky; top:0; }
-    tbody tr:nth-child(odd) { background: var(--bg-2); }
-    form input, form select, form textarea {
-      width: 100%; padding: 0.6rem 0.7rem; margin-bottom: 1rem; border-radius: 6px; border: 1px solid var(--line);
+    body { margin:0; font-family:Arial, sans-serif; background:var(--bg); color:var(--gold); }
+    header { background:var(--bg); text-align:center; padding:2rem 1rem 1.2rem; border-bottom:2px solid var(--line); }
+    header h1{ margin:0; font-size:2.2rem; }
+    header h2{ margin:.5rem 0 0; font-size:1.5rem; font-weight:normal; }
+    .tabs{ display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap; margin:1rem auto; padding:0 1rem; }
+    .tab-btn{ background:transparent; color:var(--gold); border:1px solid var(--line); padding:.6rem 1rem; border-radius:999px; cursor:pointer; }
+    .tab-btn.active,.tab-btn:focus{ outline:none; background:var(--gold); color:#000; }
+    .tab-panel{ display:none; padding:2rem 1rem; max-width:1100px; margin:auto; }
+    .tab-panel.active{ display:block; }
+    .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+    table{ width:100%; border-collapse:collapse; }
+    th,td{ padding:.8rem 1rem; text-align:left; border:1px solid var(--line); vertical-align:top; }
+    thead th{ background:var(--bg-3); position:sticky; top:0; }
+    tbody tr:nth-child(odd){ background:var(--bg-2); }
+    form input, form select, form textarea{
+      width:100%; padding:.6rem .7rem; margin-bottom:1rem; border-radius:6px; border:1px solid var(--line);
       background:#000; color:var(--gold);
     }
-    form input::file-selector-button{
-      background:var(--gold); color:#000; border:none; padding:.5rem .8rem; border-radius:6px; margin-right:.6rem; cursor:pointer;
-    }
-    form button, .btn {
-      background-color: var(--gold); color: #000; border: none; padding: 0.6rem 1rem; border-radius: 7px; cursor: pointer;
-    }
-    form button:hover, .btn:hover { background-color: var(--gold-2); }
-    footer { text-align: center; padding: 1rem; border-top: 2px solid var(--line); margin-top: 2rem; }
-    .controls { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin-top:1rem; }
-    .ghost { background:transparent; color:var(--gold); border:1px solid var(--line); padding:.6rem 1rem; border-radius:7px; cursor:pointer; }
-    .ghost:hover { background:#1a1a1a; }
-    .import-label { display:inline-flex; align-items:center; gap:.4rem; border:1px dashed var(--line); padding:.5rem .7rem; border-radius:7px; cursor:pointer; }
-    .import-label input { display:none; }
-    .hint { font-size:.9rem; opacity:.9; }
-    .row-actions { display:flex; gap:.4rem; flex-wrap:wrap; }
-    .pill { display:inline-block; padding:.25rem .55rem; border:1px solid var(--line); border-radius:999px; font-size:.8rem; }
-    .two-col { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; }
-    .three-col { display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; }
-    @media (max-width: 800px){
-      .two-col, .three-col { grid-template-columns: 1fr; }
-      .tabs { justify-content: flex-start; }
-    }
-    .charcount { font-size:.85rem; opacity:.85; text-align:right; margin-top:-.8rem; margin-bottom:1rem; }
-    .divider { border-top:1px solid var(--line); margin:1.2rem 0; opacity:.6; }
-    .sr-only { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
+    form button, .btn{ background:var(--gold); color:#000; border:none; padding:.6rem 1rem; border-radius:7px; cursor:pointer; }
+    form button:hover, .btn:hover{ background:var(--gold-2); }
+    footer{ text-align:center; padding:1rem; border-top:2px solid var(--line); margin-top:2rem; }
+    .controls{ display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin-top:1rem; }
+    .ghost{ background:transparent; color:var(--gold); border:1px solid var(--line); padding:.6rem 1rem; border-radius:7px; cursor:pointer; }
+    .ghost:hover{ background:#1a1a1a; }
+    .hint{ font-size:.9rem; opacity:.9; }
+    .row-actions{ display:flex; gap:.4rem; flex-wrap:wrap; }
+    .pill{ display:inline-block; padding:.25rem .55rem; border:1px solid var(--line); border-radius:999px; font-size:.8rem; }
+    .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .three-col{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+    @media (max-width:800px){ .two-col,.three-col{ grid-template-columns:1fr; } .tabs{ justify-content:flex-start; } }
+    .charcount{ font-size:.85rem; opacity:.85; text-align:right; margin-top:-.8rem; margin-bottom:1rem; }
+    .divider{ border-top:1px solid var(--line); margin:1.2rem 0; opacity:.6; }
+    .sr-only{ position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
+    /* Evidence links list */
+    .link-list{ list-style:none; padding:0; margin:.5rem 0 0; }
+    .link-list li{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; border:1px solid var(--line); border-radius:7px; padding:.5rem .7rem; }
+    .link-url{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70%; }
+    .host-pill{ font-size:.75rem; border:1px solid var(--line); padding:.15rem .4rem; border-radius:999px; }
   </style>
 </head>
 <body>
@@ -126,7 +111,9 @@
   <!-- WARRANTS -->
   <section id="warrants" class="tab-panel" aria-labelledby="warrants-tab">
     <h2>Warrant Application</h2>
-    <p class="hint">Officers can draft and submit a warrant package. Submissions are stored locally; you can export a JSON bundle for records.</p>
+    <p class="hint">
+      Add evidence as web links (YouTube, Medal, Google Drive, Dropbox, etc.). Links are saved in your browser and included in the JSON export.
+    </p>
 
     <form id="warrantForm">
       <div class="three-col">
@@ -171,10 +158,15 @@
         <div class="charcount"><span id="pcCount">0</span> / 2000</div>
       </div>
 
+      <!-- Evidence Links -->
       <div>
-        <label for="evidence">Evidence Upload (video/images/PDF; multiple allowed)</label>
-        <input id="evidence" type="file" accept="video/*,image/*,application/pdf" multiple>
-        <div class="hint">Files are listed and encoded to this device only. You can remove any before saving.</div>
+        <label for="evidenceUrl">Evidence Link</label>
+        <div class="two-col">
+          <input id="evidenceUrl" type="url" placeholder="Paste a URL (https://…)" >
+          <button type="button" id="addLink" class="ghost">Add Link</button>
+        </div>
+        <div class="hint">Accepted: any https link. Common hosts: youtube.com, youtu.be, medal.tv, drive.google.com, dropbox.com, etc.</div>
+        <ul id="evidenceList" class="link-list"></ul>
       </div>
 
       <div class="controls">
@@ -197,7 +189,7 @@
             <th>Officer</th>
             <th>Status</th>
             <th>Created</th>
-            <th>Files</th>
+            <th>Evidence</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -236,12 +228,11 @@
   </footer>
 
   <script>
-    /* ===== Item 3: UUID fallback (ensure before any calls) ===== */
+    /* ===== UUID fallback ===== */
     if (!('randomUUID' in crypto)) {
       crypto.randomUUID = function(){
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-          const r = Math.random() * 16 | 0;
-          const v = c === 'x' ? r : (r & 0x3 | 0x8);
+          const r = Math.random()*16|0, v = c==='x'? r : (r&0x3|0x8);
           return v.toString(16);
         });
       };
@@ -264,26 +255,34 @@
 
     // ===== Utilities =====
     const dt = () => new Date().toISOString();
-    const fmt = (d) => new Date(d).toLocaleString();
+    const fmt = d => new Date(d).toLocaleString();
     const toCSV = (rows) => {
       if(!rows.length) return '';
       const headers = Object.keys(rows[0]);
-      const escape = (v) => `"${String(v ?? '').replace(/"/g,'""')}"`;
-      const body = rows.map(r => headers.map(h => escape(r[h])).join(',')).join('\n');
+      const esc = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
+      const body = rows.map(r => headers.map(h => esc(r[h])).join(',')).join('\n');
       return headers.join(',') + '\n' + body;
-    }
+    };
     function downloadBlob(filename, blob){
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);     // ensure in DOM for some browsers
+      a.href = url; a.download = filename;
+      document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 0);
     }
+    const hostname = (url) => {
+      try{ return new URL(url).hostname.replace(/^www\./,''); } catch { return ''; }
+    };
+    const validUrl = (url) => {
+      try{
+        const u = new URL(url);
+        return u.protocol === 'https:' || u.protocol === 'http:'; // allow https/http
+      }catch{ return false; }
+    };
 
-    // ===== DOCKET (with search, edit, CSV) =====
+    // ===== DOCKET (same as before) =====
     const tbody = document.getElementById('docketBody');
     const form = document.getElementById('addCaseForm');
     const caseNum = document.getElementById('caseNum');
@@ -341,9 +340,7 @@
             const current = span.textContent;
             const input = document.createElement('input');
             input.value = current;
-            input.addEventListener('keydown', ev => {
-              if(ev.key === 'Enter'){ input.blur(); }
-            });
+            input.addEventListener('keydown', ev => { if(ev.key==='Enter'){ input.blur(); } });
             input.addEventListener('blur', () => {
               const listAll = loadDocket();
               listAll[i][key] = input.value.trim();
@@ -366,8 +363,9 @@
         const actionTd = document.createElement('td');
         actionTd.className = 'row-actions';
         actionTd.innerHTML = `<button class="ghost del-btn" data-index="${i}">Remove</button>`;
-        tbody.appendChild(tr);
         tr.appendChild(actionTd);
+
+        tbody.appendChild(tr);
       });
     }
 
@@ -386,7 +384,6 @@
         renderDocket(searchInput.value);
       });
     }
-
     if(tbody){
       tbody.addEventListener('click', (e) => {
         const btn = e.target.closest('.del-btn');
@@ -405,14 +402,14 @@
     }
     if(exportJSONBtn){
       exportJSONBtn.addEventListener('click', () => {
-        const blob = new Blob([JSON.stringify(loadDocket(), null, 2)], {type: 'application/json'});
+        const blob = new Blob([JSON.stringify(loadDocket(), null, 2)], {type:'application/json'});
         downloadBlob('docket.json', blob);
       });
     }
     if(exportCSVBtn){
       exportCSVBtn.addEventListener('click', () => {
         const csv = toCSV(loadDocket());
-        const blob = new Blob([csv], {type: 'text/csv'});
+        const blob = new Blob([csv], {type:'text/csv'});
         downloadBlob('docket.csv', blob);
       });
     }
@@ -438,9 +435,9 @@
       searchInput.addEventListener('input', (e) => renderDocket(e.target.value));
     }
 
-    // ===== WARRANTS (wrapped init) =====
+    // ===== WARRANTS (links-based evidence) =====
     function initWarrants(){
-      try {
+      try{
         const WARR_KEY = 'judge_gamble_warrants_v1';
         const warrantForm   = document.getElementById('warrantForm');
         const officerName   = document.getElementById('officerName');
@@ -450,23 +447,67 @@
         const defCID        = document.getElementById('defCID');
         const pc            = document.getElementById('pc');
         const pcCount       = document.getElementById('pcCount');
-        const evidence      = document.getElementById('evidence');
-        const saveDraftBtn  = document.getElementById('saveDraft');
+
+        const evidenceUrl   = document.getElementById('evidenceUrl');
+        const addLinkBtn    = document.getElementById('addLink');
+        const evidenceList  = document.getElementById('evidenceList');
+
+        const saveDraftBtn    = document.getElementById('saveDraft');
         const clearWarrantBtn = document.getElementById('clearWarrant');
         const warrantBody   = document.getElementById('warrantBody');
 
-        if (!warrantForm || !saveDraftBtn || !clearWarrantBtn || !warrantBody) return;
+        if (!warrantForm || !warrantBody) return;
 
-        if (submitDate && !submitDate.value) {
-          submitDate.valueAsDate = new Date();
-        }
+        // default date
+        if (submitDate && !submitDate.value) submitDate.valueAsDate = new Date();
 
+        // PC counter
         if (pc && pcCount){
           pc.addEventListener('input', () => {
             pcCount.textContent = Math.min(pc.value.length, 2000);
             if (pc.value.length > 2000) pc.value = pc.value.slice(0, 2000);
           });
         }
+
+        // ---- Evidence links (kept only in memory until save/submit) ----
+        let currentLinks = [];  // {url, host}
+
+        function renderLinks(){
+          evidenceList.innerHTML = '';
+          currentLinks.forEach((l, i) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+              <span class="link-url">${l.url}</span>
+              <span class="host-pill">${l.host || ''}</span>
+              <span class="row-actions">
+                <button class="ghost" data-rm="${i}">Remove</button>
+              </span>
+            `;
+            evidenceList.appendChild(li);
+          });
+        }
+
+        function addLink(url){
+          const clean = url.trim();
+          if(!clean){ return; }
+          if(!validUrl(clean)){ alert('Please enter a valid URL starting with http:// or https://'); return; }
+          // Optional: restrict to https only by changing validUrl
+          currentLinks.push({ url: clean, host: hostname(clean) });
+          evidenceUrl.value = '';
+          renderLinks();
+        }
+
+        addLinkBtn?.addEventListener('click', () => addLink(evidenceUrl.value));
+        evidenceUrl?.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter'){ e.preventDefault(); addLink(evidenceUrl.value); }
+        });
+        evidenceList?.addEventListener('click', (e) => {
+          const rmBtn = e.target.closest('button[data-rm]');
+          if(!rmBtn) return;
+          const idx = Number(rmBtn.getAttribute('data-rm'));
+          currentLinks.splice(idx, 1);
+          renderLinks();
+        });
 
         function loadWarrants(){
           try { return JSON.parse(localStorage.getItem(WARR_KEY) || '[]'); }
@@ -476,22 +517,10 @@
           localStorage.setItem(WARR_KEY, JSON.stringify(list));
         }
 
-        async function filesToData(files){
-          const arr = [];
-          for (const f of files || []) {
-            const dataURL = await new Promise((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onload = () => resolve(reader.result);
-              reader.onerror = reject;
-              reader.readAsDataURL(f);
-            });
-            arr.push({ name:f.name, type:f.type, size:f.size, dataURL });
-          }
-          return arr;
-        }
-
         function clearWarrantForm(){
           warrantForm.reset();
+          currentLinks = [];
+          evidenceList.innerHTML = '';
           if (pcCount) pcCount.textContent = '0';
           if (submitDate) submitDate.valueAsDate = new Date();
         }
@@ -500,6 +529,11 @@
           const list = loadWarrants();
           warrantBody.innerHTML = '';
           list.forEach((w, i) => {
+            // Backward compat: support old 'files' array by showing count
+            const linkCount = Array.isArray(w.links) ? w.links.length : 0;
+            const fileCount = Array.isArray(w.files) ? w.files.length : 0;
+            const evidenceLabel = linkCount ? `${linkCount} link(s)` : (fileCount ? `${fileCount} file(s)` : '—');
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
               <td>${w.id}</td>
@@ -508,7 +542,7 @@
               <td>${w.officerName || ''}</td>
               <td><span class="pill">${w.status || 'Draft'}</span></td>
               <td>${fmt(w.createdAt || new Date())}</td>
-              <td>${(w.files && w.files.length) ? `${w.files.length} file(s)` : '—'}</td>
+              <td>${evidenceLabel}</td>
               <td class="row-actions">
                 <button class="ghost" data-act="export" data-idx="${i}">Export</button>
                 <button class="ghost" data-act="duplicate" data-idx="${i}">Duplicate</button>
@@ -543,9 +577,8 @@
           }
         });
 
-        saveDraftBtn.addEventListener('click', async () => {
+        saveDraftBtn?.addEventListener('click', () => {
           try {
-            const files = await filesToData(evidence?.files);
             const list = loadWarrants();
             const id = crypto.randomUUID();
             const record = {
@@ -556,7 +589,7 @@
               defName: defName?.value?.trim() || '',
               defCID: defCID?.value?.trim() || '',
               probableCause: pc?.value?.trim() || '',
-              files,
+              links: currentLinks.slice(), // evidence links
               status: 'Draft',
               createdAt: dt()
             };
@@ -566,11 +599,11 @@
             alert('Draft saved locally.');
           } catch (err) {
             console.error(err);
-            alert('Could not save draft. See console for details.');
+            alert('Could not save draft.');
           }
         });
 
-        warrantForm.addEventListener('submit', async (e) => {
+        warrantForm.addEventListener('submit', (e) => {
           e.preventDefault();
           try {
             if (pc && pc.value.trim().length < 50) {
@@ -582,8 +615,6 @@
               alert('Defendant CID must be 3–12 letters/numbers, e.g., ABC12345.');
               return;
             }
-
-            const files = await filesToData(evidence?.files);
             const list = loadWarrants();
             const id = crypto.randomUUID();
             const record = {
@@ -594,7 +625,7 @@
               defName: defName?.value?.trim() || '',
               defCID: cidVal,
               probableCause: pc?.value?.trim() || '',
-              files,
+              links: currentLinks.slice(),
               status: 'Submitted',
               createdAt: dt()
             };
@@ -602,6 +633,7 @@
             saveWarrants(list);
             renderWarrants();
 
+            // Export JSON (includes links)
             const blob = new Blob([JSON.stringify(record, null, 2)], {type:'application/json'});
             downloadBlob(`warrant_${id}.json`, blob);
 
@@ -609,17 +641,17 @@
             clearWarrantForm();
           } catch (err) {
             console.error(err);
-            alert('Submit failed. See console for details.');
+            alert('Submit failed.');
           }
         });
 
-        clearWarrantBtn.addEventListener('click', () => {
+        clearWarrantBtn?.addEventListener('click', () => {
           if (confirm('Clear the form?')) clearWarrantForm();
         });
 
-        // initial render
+        // init
         renderWarrants();
-      } catch (err) {
+      }catch(err){
         console.error('Warrant init error:', err);
         alert('There was an error initializing the Warrant tab. See console for details.');
       }
